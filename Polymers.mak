@@ -33,8 +33,8 @@ NULL=nul
 ################################################################################
 # Begin Project
 # PROP Target_Last_Scanned "Polymers - Win32 Debug"
-F90=fl32.exe
 RSC=rc.exe
+F90=fl32.exe
 
 !IF  "$(CFG)" == "Polymers - Win32 Release"
 
@@ -56,10 +56,11 @@ ALL : "$(OUTDIR)\Polymers.exe"
 CLEAN : 
 	-@erase ".\Release\Polymers.exe"
 	-@erase ".\Release\Input.obj"
+	-@erase ".\Release\Numerical_Fmixing_calculation.obj"
 	-@erase ".\Release\FI_POL.obj"
 	-@erase ".\Release\DICOTOMY.obj"
 	-@erase ".\Release\MK_DO_MAIN.obj"
-	-@erase ".\Release\Numerical_Fmixing_calculation.obj"
+	-@erase ".\Release\GuggenheimModel.mod"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -82,10 +83,10 @@ LINK32_FLAGS=kernel32.lib /nologo /subsystem:console /incremental:no\
  /pdb:"$(OUTDIR)/Polymers.pdb" /machine:I386 /out:"$(OUTDIR)/Polymers.exe" 
 LINK32_OBJS= \
 	"$(INTDIR)/Input.obj" \
+	"$(INTDIR)/Numerical_Fmixing_calculation.obj" \
 	"$(INTDIR)/FI_POL.obj" \
 	"$(INTDIR)/DICOTOMY.obj" \
 	"$(INTDIR)/MK_DO_MAIN.obj" \
-	"$(INTDIR)/Numerical_Fmixing_calculation.obj" \
 	"..\..\LIB\MATHS.LIB" \
 	"..\..\LIB\MATHD.LIB"
 
@@ -116,8 +117,9 @@ CLEAN :
 	-@erase ".\Debug\FI_POL.obj"
 	-@erase ".\Debug\Input.obj"
 	-@erase ".\Debug\DICOTOMY.obj"
-	-@erase ".\Debug\MK_DO_MAIN.obj"
 	-@erase ".\Debug\Numerical_Fmixing_calculation.obj"
+	-@erase ".\Debug\MK_DO_MAIN.obj"
+	-@erase ".\Debug/GuggenheimModel.mod"
 	-@erase ".\Debug\Polymers.ilk"
 	-@erase ".\Debug\Polymers.pdb"
 
@@ -145,8 +147,8 @@ LINK32_OBJS= \
 	"$(INTDIR)/FI_POL.obj" \
 	"$(INTDIR)/Input.obj" \
 	"$(INTDIR)/DICOTOMY.obj" \
-	"$(INTDIR)/MK_DO_MAIN.obj" \
 	"$(INTDIR)/Numerical_Fmixing_calculation.obj" \
+	"$(INTDIR)/MK_DO_MAIN.obj" \
 	"..\..\LIB\MATHS.LIB" \
 	"..\..\LIB\MATHD.LIB"
 
@@ -183,8 +185,27 @@ LINK32_OBJS= \
 
 SOURCE=.\MK_DO_MAIN.f90
 
-"$(INTDIR)\MK_DO_MAIN.obj" : $(SOURCE) "$(INTDIR)"
+!IF  "$(CFG)" == "Polymers - Win32 Release"
 
+NODEP_F90_MK_DO=\
+	".\Release\GuggenheimModel.mod"\
+	
+
+"$(INTDIR)\MK_DO_MAIN.obj" : $(SOURCE) "$(INTDIR)"\
+ "$(INTDIR)\GuggenheimModel.mod"
+
+
+!ELSEIF  "$(CFG)" == "Polymers - Win32 Debug"
+
+DEP_F90_MK_DO=\
+	".\Debug/GuggenheimModel.mod"\
+	
+
+"$(INTDIR)\MK_DO_MAIN.obj" : $(SOURCE) $(DEP_F90_MK_DO) "$(INTDIR)"\
+ "$(INTDIR)\GuggenheimModel.mod"
+
+
+!ENDIF 
 
 # End Source File
 ################################################################################
@@ -243,8 +264,39 @@ SOURCE=\MSDEV\LIB\MATHD.LIB
 
 SOURCE=.\Numerical_Fmixing_calculation.f90
 
-"$(INTDIR)\Numerical_Fmixing_calculation.obj" : $(SOURCE) "$(INTDIR)"
+!IF  "$(CFG)" == "Polymers - Win32 Release"
 
+F90_MODOUT=\
+	"GuggenheimModel"
+
+
+BuildCmds= \
+	$(F90) $(F90_PROJ) $(SOURCE) \
+	
+
+"$(INTDIR)\Numerical_Fmixing_calculation.obj" : $(SOURCE) "$(INTDIR)"
+   $(BuildCmds)
+
+"$(INTDIR)\GuggenheimModel.mod" : $(SOURCE) "$(INTDIR)"
+   $(BuildCmds)
+
+!ELSEIF  "$(CFG)" == "Polymers - Win32 Debug"
+
+F90_MODOUT=\
+	"GuggenheimModel"
+
+
+BuildCmds= \
+	$(F90) $(F90_PROJ) $(SOURCE) \
+	
+
+"$(INTDIR)\Numerical_Fmixing_calculation.obj" : $(SOURCE) "$(INTDIR)"
+   $(BuildCmds)
+
+"$(INTDIR)\GuggenheimModel.mod" : $(SOURCE) "$(INTDIR)"
+   $(BuildCmds)
+
+!ENDIF 
 
 # End Source File
 # End Target
