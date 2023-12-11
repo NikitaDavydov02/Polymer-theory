@@ -6,8 +6,10 @@ Implicit None
 Integer L
 Parameter (L=2)
 Real*8 fipolimer(5),XBrush(L)
-Real*8 rNA,rNB,sigma,R,aA,BA,y_min,y_max,yacc,rtbis3,y_cur,y_try,y_edge,P_AB,fiav,Osmmix,Fmix
+Real*8 rNA,rNB,sigma,R,aA,BA,y_min,y_max,yacc,rtbis3,y_cur,y_try,y_edge,P_AB,fiav,Osmmix
 Real*8 chi(5,5),Nal(5),lambda(5),osmbulk,Lamb_Pol
+Real*8 Fmix, u_pol
+
 common/elastic/ R,BA,y_min,y_max,yacc,aA,rNA,rNB,sigma
 common/chilam/chi,Nal,lambda,osmbulk,Lamb_Pol
 
@@ -34,6 +36,20 @@ fipolimer(1) =1.0d0- fipolimer(2)- fipolimer(3)
 
 Fmix=0
 Fmix= CalculateMixingFreeEnergy(3,fipolimer)
+u_pol=CalculateExchangeChemialPotentialOfComponent(3,fipolimer,2)
+
+write(*,*) 'phi_solvent=', fipolimer(1)
+write(*,*) 'phi_conteminant=', fipolimer(2)
+write(*,*) 'phi_polymer=', fipolimer(3)
+
+
+write(*,*) 'Fmix=', Fmix
+write(*,*) 'u_pol=', u_pol
+
+
+
+stop
+
 
 write(1,'(F10.4,3(2X,F8.4),2X,E12.4)') y_cur, fipolimer(1),fipolimer(2),fipolimer(3), (Osmmix(3,fipolimer)-osmbulk)
 enddo

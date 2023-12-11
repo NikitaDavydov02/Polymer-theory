@@ -33,12 +33,34 @@ contains
 		!Calculates exchange chemical potential of component in the mixture based on Fmix energy
 		implicit none
 		real*8 	chi(5,5),Nal(5),volumeFractions(5),beta,lambda(5),osmbulk,Lamb_Pol
-		real*8 x,x_dx,f,f_df
+		real*8 x,x_dx,f,f_df,max_dx,dx, oldSolventVolumeFraction
 		integer numberOfComponents,component,z
 		common/chilam/chi,Nal,lambda,osmbulk,Lamb_Pol
 		common/additionalParameters/z
 
-		CalculateExchangeChemialPotentialOfComponent=0
+		f=CalculateMixingFreeEnergy(numberOfComponents,volumeFractions)
+		x=volumeFractions(component)
+
+		max_dx=1-x
+		if(volumeFractions(1)<max_dx) then
+			max_dx=volumeFractions(1)
+		end if
+		dx=0.01
+		if(dx>max_dx) then
+			dx=max_dx
+		end if
+
+		x_dx=x+dx
+		oldSolventVolumeFraction = volumeFractions(1)
+		volumeFractions(component)=x_dx
+		volumeFractions(1)=volumeFractions(1)-dx
+
+		f_df=CalculateMixingFreeEnergy(numberOfComponents,volumeFractions)
+
+		volumeFractions(1)=oldSolventVolumeFraction
+		volumeFractions(component)=x
+
+		CalculateExchangeChemialPotentialOfComponent=(f_df-f)/(dx)
 
 		return
 	end function
