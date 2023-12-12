@@ -50,8 +50,8 @@ contains
 			dx=max_dx
 		end if
 
-		x_dx=x+dx
 		oldSolventVolumeFraction = volumeFractions(1)
+		x_dx=x+dx
 		volumeFractions(component)=x_dx
 		volumeFractions(1)=volumeFractions(1)-dx
 

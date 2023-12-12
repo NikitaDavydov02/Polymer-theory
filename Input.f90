@@ -1,4 +1,5 @@
-subroutine enter 
+subroutine enter
+	use GuggenheimModel 
 	Implicit none
 	Real*8 rN,rNA,rNB,sigma,R,aA,nu,coe,BA,pi,y_min,y_max,yacc,Lamb_Pol
 	Real*8 chi(5,5),Nal(5),lambda(5), Fibulk(5),Lagrbulk(5),osmbulk,Osmmix
