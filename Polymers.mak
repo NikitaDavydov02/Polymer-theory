@@ -33,8 +33,8 @@ NULL=nul
 ################################################################################
 # Begin Project
 # PROP Target_Last_Scanned "Polymers - Win32 Debug"
-RSC=rc.exe
 F90=fl32.exe
+RSC=rc.exe
 
 !IF  "$(CFG)" == "Polymers - Win32 Release"
 
@@ -56,11 +56,11 @@ ALL : "$(OUTDIR)\Polymers.exe"
 CLEAN : 
 	-@erase ".\Release\Polymers.exe"
 	-@erase ".\Release\Input.obj"
+	-@erase ".\Release\GuggenheimModel.mod"
 	-@erase ".\Release\Numerical_Fmixing_calculation.obj"
 	-@erase ".\Release\FI_POL.obj"
 	-@erase ".\Release\DICOTOMY.obj"
 	-@erase ".\Release\MK_DO_MAIN.obj"
-	-@erase ".\Release\GuggenheimModel.mod"
 
 "$(OUTDIR)" :
     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
@@ -116,10 +116,10 @@ CLEAN :
 	-@erase ".\Debug\Polymers.exe"
 	-@erase ".\Debug\FI_POL.obj"
 	-@erase ".\Debug\Input.obj"
+	-@erase ".\Debug/GuggenheimModel.mod"
 	-@erase ".\Debug\DICOTOMY.obj"
 	-@erase ".\Debug\Numerical_Fmixing_calculation.obj"
 	-@erase ".\Debug\MK_DO_MAIN.obj"
-	-@erase ".\Debug/GuggenheimModel.mod"
 	-@erase ".\Debug\Polymers.ilk"
 	-@erase ".\Debug\Polymers.pdb"
 
@@ -202,7 +202,7 @@ DEP_F90_MK_DO=\
 	
 
 "$(INTDIR)\MK_DO_MAIN.obj" : $(SOURCE) $(DEP_F90_MK_DO) "$(INTDIR)"\
- "$(INTDIR)\GuggenheimModel.mod"
+ "$(INTDIR)\guggenheimmodel.mod"
 
 
 !ENDIF 
@@ -213,8 +213,26 @@ DEP_F90_MK_DO=\
 
 SOURCE=.\Input.f90
 
-"$(INTDIR)\Input.obj" : $(SOURCE) "$(INTDIR)"
+!IF  "$(CFG)" == "Polymers - Win32 Release"
 
+NODEP_F90_INPUT=\
+	".\Release\GuggenheimModel.mod"\
+	
+
+"$(INTDIR)\Input.obj" : $(SOURCE) "$(INTDIR)" "$(INTDIR)\GuggenheimModel.mod"
+
+
+!ELSEIF  "$(CFG)" == "Polymers - Win32 Debug"
+
+DEP_F90_INPUT=\
+	".\Debug/GuggenheimModel.mod"\
+	
+
+"$(INTDIR)\Input.obj" : $(SOURCE) $(DEP_F90_INPUT) "$(INTDIR)"\
+ "$(INTDIR)\guggenheimmodel.mod"
+
+
+!ENDIF 
 
 # End Source File
 ################################################################################
@@ -293,7 +311,7 @@ BuildCmds= \
 "$(INTDIR)\Numerical_Fmixing_calculation.obj" : $(SOURCE) "$(INTDIR)"
    $(BuildCmds)
 
-"$(INTDIR)\GuggenheimModel.mod" : $(SOURCE) "$(INTDIR)"
+"$(INTDIR)\guggenheimmodel.mod" : $(SOURCE) "$(INTDIR)"
    $(BuildCmds)
 
 !ENDIF 

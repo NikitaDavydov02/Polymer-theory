@@ -12,6 +12,8 @@ subroutine FI_POLI(XBrush,y_cur)
 	 ERRREL=1.0d-4
 	 XBrushGUESS(1)=	1.0d-8		  ! this is the fraction of biocomponent in the brush
 	 XBrushGUESS(2)=	0.97d0		  ! this is the fraction of polymer in the brush
+	 !XBrushGUESS(1)=	0.1d0		  ! this is the fraction of biocomponent in the brush
+	 !XBrushGUESS(2)=	0.3d0		  ! this is the fraction of polymer in the brush
 
 	 CALL DNEQNF (EU_LA, ERRREL, 2, ITMAX, XBrushGUESS, XBrush, FNORM)
 
@@ -42,8 +44,10 @@ Subroutine EU_LA (XBrush,F,L)
 
 	F(1) = (DfmixDfi(2)-lambda(2))**2  !bio contaminant error
 	F(2) = (DfmixDfi(3)+BA*(R*(y_cur-1.0d0))**2-Lamb_Pol)**2  !polymer error
+	!F(1) = (DfmixDfi(2)-lambda(2))  !bio contaminant error
+	!F(2) = (DfmixDfi(3)+BA*(R*(y_cur-1.0d0))**2-Lamb_Pol)  !polymer error
 
-	write(*,*) F,Xbrush
+	write(*,*) 'EU_LA', F,Xbrush
 
 	return
 end subroutine

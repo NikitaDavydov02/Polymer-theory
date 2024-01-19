@@ -1,6 +1,6 @@
 
 Program NumSOL
-	use GuggenheimModel
+	!use GuggenheimModel
 
 	Implicit None
 	Integer L
@@ -45,10 +45,10 @@ Program NumSOL
 		!write(*,*) 'phi_polymer=', fipolimer(3)
 
 
-		Fmix= CalculateMixingFreeEnergy(3,fipolimer)
-		u_pol=CalculateExchangeChemialPotentialOfComponent(3,fipolimer,3)
-		u_sol=CalculateExchangeChemialPotentialOfComponent(3,fipolimer,1)
-		u_bio=CalculateExchangeChemialPotentialOfComponent(3,fipolimer,2)
+		!Fmix= CalculateMixingFreeEnergy(3,fipolimer)
+		!u_pol=CalculateExchangeChemialPotentialOfComponent(3,fipolimer,3)
+		!u_sol=CalculateExchangeChemialPotentialOfComponent(3,fipolimer,1)
+		!u_bio=CalculateExchangeChemialPotentialOfComponent(3,fipolimer,2)
 
 
 		write(*,*) 'Fmix=', Fmix

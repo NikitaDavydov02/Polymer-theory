@@ -17,10 +17,17 @@ contains
 		!z=4	!Coordination number
 		beta=sqrt(1+4*X(2)*X(3)*(exp(2*chi(2,3)/z)-1)) !Correlator for strong interaction
 
+		if(X(1)<=0.or.X(2)<=0) then
+			z=4
+		end if
 		Fmix=X(1)*dlog(X(1))+X(2)*dlog(X(2))/Nal(2)
-		Fmix=Fmix+chi(2,3)*X(2)*X(3)*2/(beta+1)
-		Fmix=Fmix+chi(1,2)*X(1)*(X(2)-(1-2/z)*X(3)*X(2)*2/(beta+1))/(X(1)+X(2)-(1-2/z)*X(3)*X(2)*2/(beta+1))
-		Fmix=Fmix+chi(1,3)*X(1)*((1-2/z)*X(3)-(1-2/z)*X(3)*X(2)*2/(beta+1))/(X(1)+(1-2/z)*X(3)-(1-2/z)*X(3)*X(2)*2/(beta+1))
+		Fmix=Fmix+chi(2,3)*X(2)*X(3)
+		Fmix=Fmix+chi(1,2)*X(1)*X(2)
+		Fmix=Fmix+chi(1,3)*X(1)*X(3)
+
+		!Fmix=Fmix+chi(2,3)*X(2)*X(3)*2/(beta+1)
+		!Fmix=Fmix+chi(1,2)*X(1)*(X(2)-(1-2/z)*X(3)*X(2)*2/(beta+1))/(X(1)+X(2)-(1-2/z)*X(3)*X(2)*2/(beta+1))
+		!Fmix=Fmix+chi(1,3)*X(1)*((1-2/z)*X(3)-(1-2/z)*X(3)*X(2)*2/(beta+1))/(X(1)+(1-2/z)*X(3)-(1-2/z)*X(3)*X(2)*2/(beta+1))
 		CalculateMixingFreeEnergy=Fmix
 
 		return
