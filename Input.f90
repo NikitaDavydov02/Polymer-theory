@@ -53,6 +53,8 @@ subroutine enter
 	! give bulk composition and calculate Lagr.multipliers and osm pressure in the bulk:
 	Fibulk(1) =0.98d0
 	Fibulk(2)=1.0d0-Fibulk(1)
+	FiBulk(3)=0.0d0
+
 	call  Lagrmix(2,Fibulk,Lagrbulk)
 	lambda(2)=Lagrbulk(2)		  !  this is for biocomponent 
 	osmbulk=Osmmix(2,Fibulk)  	  !  this is for solvent
@@ -67,9 +69,9 @@ end subroutine
 !****************************************************************************************
 subroutine Lagrmix(K,X,DfmixDfi)
 	!input: K -number of components    X-volume fractions;   output:   DfmixDfi    dfmix/dFI(I) 
- 
+ 	use GuggenheimModel 
 	implicit none
-	real*8 	chi(5,5),Nal(5),lambda(5),X(5),DfmixDfi(5),sum,osmbulk,Lamb_Pol
+	real*8 	chi(5,5),Nal(5),lambda(5),X(5),DfmixDfi(5),sum,osmbulk,Lamb_Pol, AlternativeDfmixDfi(5)
 	integer K,i,j
 	common/chilam/chi,Nal,lambda,osmbulk,Lamb_Pol
 
@@ -79,15 +81,18 @@ subroutine Lagrmix(K,X,DfmixDfi)
 			sum=sum+X(j)*(chi(i,j)-chi(1,j))
 		enddo
 		DfmixDfi(i)=(dlog(X(i))+1.0d0)/Nal(i)-(dlog(X(1))+1.0d0)/Nal(1)+sum   ! dummy for solvent  identically 0
+		!AlternativeDfmixDfi(i)=CalculateExchangeChemialPotentialOfComponent(3,X,i)
+		!DfmixDfi(i)=AlternativeDfmixDfi(i)
 	enddo
 	return
 end subroutine
 !********************************************************************************************
 subroutine Lagrmix_PolA(K,X,DfmixDfi)
 	!input: K -number of components    X-volume fractions;   output:   DfmixDfi    dfmix/dFI in the brush 
- 
+ 	use GuggenheimModel 
 	implicit none
-	real*8 	chi(5,5),Nal(5),lambda(5),X(5),DfmixDfi(5),sum,osmbulk,Lamb_Pol
+	real*8 	chi(5,5),Nal(5),lambda(5),X(5),DfmixDfi(5),sum,osmbulk,Lamb_Pol, AlternativeDfmixDfi(5)
+
 	integer K,i,j,n
 	common/chilam/chi,Nal,lambda,osmbulk,Lamb_Pol
 
@@ -108,6 +113,8 @@ subroutine Lagrmix_PolA(K,X,DfmixDfi)
 		else
 			DfmixDfi(i)=(dlog(X(i))+1.0d0)/Nal(i)-(dlog(X(1))+1.0d0)/Nal(1)+sum   ! dummy for solvent  identically 0
 		endif
+		!AlternativeDfmixDfi(i)=CalculateExchangeChemialPotentialOfComponent(3,X,i)
+		!DfmixDfi(i)=AlternativeDfmixDfi(i)
 	enddo
 	return
 end subroutine

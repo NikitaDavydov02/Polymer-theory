@@ -8,22 +8,23 @@ contains
 		!Calculates Fmix/kT in Guggenheim model with correlated strong interaction and non-correlated other interactions
 		!but with taking into account that strong interaction occupies some amount of pairs from non-correlated pairs
 		implicit none
-		real*8 	chi(5,5),Nal(5),lambda(5),X(5),sum,osmbulk,Lamb_Pol,Fmix,beta
+		real*8 	chi(5,5),Nal(5),lambda(5),X(5),sum,osmbulk,Lamb_Pol,Fmix,beta,a,b,c,d
 		integer K,z
 		common/chilam/chi,Nal,lambda,osmbulk,Lamb_Pol
 		common/additionalParameters/z
 
 
 		!z=4	!Coordination number
-		beta=sqrt(1+4*X(2)*X(3)*(exp(2*chi(2,3)/z)-1)) !Correlator for strong interaction
+		!beta=sqrt(1+4*X(2)*X(3)*(exp(2*chi(2,3)/z)-1)) !Correlator for strong interaction
 
-		!if(X(1)<=0.or.X(2)<=0) then
-		!	z=4
-		!end if
-		Fmix=X(1)*dlog(X(1))+X(2)*dlog(X(2))/Nal(2)
-		Fmix=Fmix+chi(2,3)*X(2)*X(3)
-		Fmix=Fmix+chi(1,2)*X(1)*X(2)
-		Fmix=Fmix+chi(1,3)*X(1)*X(3)
+		if(X(1)<=0.or.X(2)<=0) then
+			z=4
+		end if
+		a=X(1)*dlog(X(1))+X(2)*dlog(X(2))/Nal(2)
+		b=chi(2,3)*X(2)*X(3)
+		c=chi(1,2)*X(1)*X(2)
+		d=chi(1,3)*X(1)*X(3)
+		Fmix=a+b+c+d
 
 		!Fmix=Fmix+chi(2,3)*X(2)*X(3)*2/(beta+1)
 		!Fmix=Fmix+chi(1,2)*X(1)*(X(2)-(1-2/z)*X(3)*X(2)*2/(beta+1))/(X(1)+X(2)-(1-2/z)*X(3)*X(2)*2/(beta+1))
@@ -54,7 +55,7 @@ contains
 		end if
 		dx=0.01
 		if(dx>max_dx) then
-			dx=max_dx*0.5d
+			dx=max_dx
 		end if
 
 		oldSolventVolumeFraction = volumeFractions(1)
