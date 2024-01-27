@@ -29,7 +29,7 @@ Program NumSOL
 	P_AB=fiav(y_cur,y_edge)      !   Polymer concentration at A/B boundary (highest)  must work before finding profile to set  Lagr multipliers in common block
 
 	do while (y_cur.LT.y_edge)
-		y_cur = y_cur + aA/R  
+		!y_cur = y_cur + aA/R  
 		!write(*,*) 'Phi poly subroutine is called'
 
 
@@ -58,6 +58,7 @@ Program NumSOL
 
 		!Output resulting concentration profile
 		write(1,'(F10.4,3(2X,F8.4),2X,E12.4)') y_cur, fipolimer(1),fipolimer(2),fipolimer(3), (Osmmix(3,fipolimer)-osmbulk)
+		y_cur = y_cur + aA/R 
 	enddo
  
 	write(*,*) 'beta',y_edge
